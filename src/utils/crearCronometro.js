@@ -56,29 +56,28 @@ export const genCronometro = (fecha) => {
   const diferencia = fin - ahora;
 
   if (diferencia <= 0) {
-    return "00:00:00";
-  };
+    return "Subasta Terminada";
+  }
 
-   // 1 mes ≈ 30.44 días en milisegundos
-  const MS_POR_MES = 1000 * 60 * 60 * 24 * 30.44;
-  const meses = Math.floor(diferencia / MS_POR_MES);
-  const restoTrasMeses = diferencia % MS_POR_MES;
-
-  const dias = Math.floor(restoTrasMeses / (1000 * 60 * 60 * 24));
+  const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
   const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-  const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-  const formatoMeses = String(meses).padStart(2, '0');
-  const formatoDias = String(dias).padStart(2, "0");
-  const formatoHoras = String(horas).padStart(2, "0");
-  const formatoMinutos = String(minutos).padStart(2, "0");
-  const formatoSegundos = String(segundos).padStart(2, "0");
-
-  return [
-    (meses > 1) ? `${meses} Meses` : '',
-    (dias > 1) ? `${dias} Días` : '',
-    (formatoHoras > 0) ? `${formatoHoras} ${(formatoHoras > 1) ? 'Hrs' : 'Hr'}` : '',
-    (formatoMinutos > 0) ? `${formatoMinutos} ${(formatoMinutos > 1) ? 'Mins' : 'Min'}` : ''
-  ].filter(Boolean).join(' ');
+  // Si quedan más de 30 días, mostrar en días
+  if (dias > 30) {
+    return `${dias} días restantes`;
+  }
+  
+  // Si quedan más de 1 día, mostrar días y horas
+  if (dias > 0) {
+    return `${dias}d ${horas}h ${minutos}m`;
+  }
+  
+  // Si queda menos de un día, mostrar solo horas y minutos
+  if (horas > 0) {
+    return `${horas}h ${minutos}m`;
+  }
+  
+  // Si queda menos de una hora, mostrar solo minutos
+  return `${minutos}m`;
 };

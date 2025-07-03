@@ -4,7 +4,7 @@ import { consLogged } from "../../../const/consLogged";
 export const userSlice = createSlice({
   name: "auth",
   initialState: {
-    logged: consLogged.NOTLOGGED,
+    logged: consLogged.STARTING,
     loginErr: null,
     loadingLogin: false,
     user: {

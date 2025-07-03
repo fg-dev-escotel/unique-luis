@@ -6,7 +6,18 @@ import { store } from './store/store'
 import App from './App.jsx'
 import './index.css'
 
-// Función para cargar scripts dinámicamente
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
+);
+
 const loadScript = (src) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
@@ -17,13 +28,10 @@ const loadScript = (src) => {
   });
 };
 
-// Cargar todas las librerías JavaScript necesarias
 const loadAllScripts = async () => {
   try {
-    // Cargar jQuery primero (requerido por otras librerías)
     await loadScript('/assets/js/jquery-3.6.0.min.js');
     
-    // Cargar el resto de librerías
     await Promise.all([
       loadScript('/assets/js/modernizr.min.js'),
       loadScript('/assets/js/bootstrap.bundle.min.js'),
@@ -39,7 +47,6 @@ const loadAllScripts = async () => {
       loadScript('/assets/js/wow.min.js')
     ]);
     
-    // Cargar el script principal al final
     await loadScript('/assets/js/main.js');
     
     console.log('Todas las librerías cargadas correctamente');
@@ -48,29 +55,4 @@ const loadAllScripts = async () => {
   }
 };
 
-// Crear el root una sola vez
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
-// Inicializar la aplicación con Redux Provider
-const renderApp = () => {
-  root.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </React.StrictMode>
-  );
-};
-
-// Cargar scripts y luego renderizar
-loadAllScripts().then(renderApp);
-
-// Si hay problemas con las librerías, cargar la app de todos modos
-setTimeout(() => {
-  const rootElement = document.getElementById('root');
-  if (!rootElement.hasChildNodes()) {
-    renderApp();
-  }
-}, 3000);
+loadAllScripts();

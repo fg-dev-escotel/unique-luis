@@ -40,26 +40,29 @@ export const startRefreshToken = () => {
     if (!token) {
       dispatch(setLogged(consLogged.NOTLOGGED));
       return;
-    } else {
+    }
+
+    try {
       dispatch(storeUser(parseJwt(token)));
       dispatch(setLogged(consLogged.LOGGED));
-    };
-    
-    const r = await fetchSinToken("post", `${_URL_DEV}/Login/Refresh`, {
-      token,
-      app: "AppComprador",
-    });
+      
+      const r = await fetchSinToken("post", `${_URL_DEV}/Login/Refresh`, {
+        token,
+        app: "AppComprador",
+      });
 
-    if (r.ok) {
-      localStorage.setItem("token", r.data.data);
-      dispatch(storeUser(parseJwt(r.data.data)));
-      dispatch(setLogged(consLogged.LOGGED));
-    } else {
+      if (r.ok) {
+        localStorage.setItem("token", r.data.data);
+        dispatch(storeUser(parseJwt(r.data.data)));
+        dispatch(setLogged(consLogged.LOGGED));
+      } else {
+        dispatch(setLogged(consLogged.NOTLOGGED));
+        localStorage.removeItem("token");
+      }
+    } catch (error) {
+      console.error("Error refreshing token:", error);
       dispatch(setLogged(consLogged.NOTLOGGED));
-      const token = localStorage.removeItem("token");
-      if (!r.response || r.response.status == 500)
-        dispatch(setLoginErr("Error en servidor"));
-      if (r.response.status == 400) dispatch(setLoginErr(r.response.data));
+      localStorage.removeItem("token");
     }
   };
 };
