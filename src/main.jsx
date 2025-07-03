@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { store } from './store/store'
 import App from './App.jsx'
 import './index.css'
 
@@ -49,27 +51,26 @@ const loadAllScripts = async () => {
 // Crear el root una sola vez
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-// Inicializar la aplicación
-loadAllScripts().then(() => {
+// Inicializar la aplicación con Redux Provider
+const renderApp = () => {
   root.render(
     <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
     </React.StrictMode>
   );
-});
+};
+
+// Cargar scripts y luego renderizar
+loadAllScripts().then(renderApp);
 
 // Si hay problemas con las librerías, cargar la app de todos modos
 setTimeout(() => {
   const rootElement = document.getElementById('root');
   if (!rootElement.hasChildNodes()) {
-    root.render(
-      <React.StrictMode>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </React.StrictMode>
-    );
+    renderApp();
   }
 }, 3000);

@@ -1,10 +1,9 @@
-// src/pages/Cars.jsx
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../components/ui/Breadcrumb';
 import CarSidebar from '../components/ui/CarSidebar';
-import { Loading } from '../components/Loading';
+import Loading from '../components/Loading';
 import { startGetSubastaTorres } from '../store/slices/subastaSlice/thunks';
 import { formatoMoneda } from '../utils/formatoMoneda';
 import { genCronometro } from '../utils/crearCronometro';
@@ -80,7 +79,7 @@ const Cars = () => {
     // Aplicar filtros si existen
     if (filters.search) {
       cars = cars.filter(car => 
-        car.nombre.toLowerCase().includes(filters.search.toLowerCase())
+        car.nombre?.toLowerCase().includes(filters.search.toLowerCase())
       );
     }
 
@@ -112,7 +111,7 @@ const Cars = () => {
     return (
       <>
         <Breadcrumb title="Subastas de Vehículos" currentPage="Subastas" />
-        <Loading />
+        <Loading message="Cargando subastas..." />
       </>
     );
   }
