@@ -9,12 +9,10 @@ import About from './pages/About';
 import Cars from './pages/Cars';
 import Contact from './pages/Contact';
 import Services from './pages/Services';
-// Puedes agregar más imports de páginas aquí
 
 function App() {
   return (
     <div className="App">
-      {/* Preloader */}
       <div className="preloader">
         <div className="loader-ripple">
           <div></div>
@@ -30,7 +28,6 @@ function App() {
           <Route path="/cars" element={<Cars />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/services" element={<Services />} />
-          {/* Agrega más rutas según tus páginas */}
         </Routes>
       </main>
       <Footer />
